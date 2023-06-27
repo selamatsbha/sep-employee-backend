@@ -48,4 +48,27 @@ router.get("/users", async (req, res) => {
     }
   });
 
+  // TO DELETE AN EMPLOYEE
+
+  router.delete("/:id", async (req, res) => {
+    try {
+      await User.findByIdAndDelete( req.params.id );
+      res.status(200).json("The user has been deleted");
+    }catch (err) {
+      res.status(500).json(err);
+    }
+  });
+
+  // Login
+
+  router.post("/:login", async (req, res) => {
+    try{
+      const user = await User.findOne({email: req.body.email});
+      user && res.status(200).json("user is in our system");
+      !user && res.status(401).json("Wrong email");
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  })
+
     module.exports = router;
