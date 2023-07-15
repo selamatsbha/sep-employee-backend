@@ -1,6 +1,5 @@
 const router = require("express").Router();
-const employee = require("../model/employee");
-const Employee = require("../model/employee");
+const Book = require("../model/book");
 
 //get, post, put, delete
 //RESTApi standard we can't use verbs to name our endpoints (nouns)
@@ -8,44 +7,41 @@ const Employee = require("../model/employee");
 // const obj = {} object literal
 // const obj = new Obj({name: "", occupation: ""})
 /* ADD AN EMPLOYEE INFO */
-router.post("/employee", async (req, res) => {
-  const newEmployee = new Employee({
-    name: req.body.name,
-    occupation: req.body.occupation,
+router.post("/book", async (req, res) => {
+  const newBook = new Book({
     imageUrl: req.body.imageUrl,
-    callMobile: req.body.callMobile,
-    callOffice: req.body.callOffice,
-    sms: req.body.sms,
-    email: req.body.email,
+    title: req.body.title,
+    authors: req.body.authors,
+    description: req.body.description,
   });
 
   try {
-    const savedEmployeeData = await newEmployee.save();
-    res.status(200).json(savedEmployeeData);
+    const savedBookData = await newBook.save();
+    res.status(200).json(savedBookData);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 /* GET ALL EMPLOYEES*/
-router.get("/get-employees", async (req, res) => {
+router.get("/get-books", async (req, res) => {
   try {
-    const getAllEmployees = await Employee.find({});
-    res.status(200).json(getAllEmployees);
+    const getAllBooks = await Book.find({});
+    res.status(200).json(getAllBooks);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 /* GET A SPECIFIC EMPLOYEE*/
-router.get("/:id", async (req, res) => {
-  try {
-    const findEmployees = await Employee.findById(req.params.id);
-    res.status(200).json(findEmployees);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+// router.get("/:id", async (req, res) => {
+//   try {
+//     const findEmployees = await Employee.findById(req.params.id);
+//     res.status(200).json(findEmployees);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 /* UPDATE AN ENPLOYEE DATA */
 
@@ -66,14 +62,14 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const query = { _id: req.params.id };
-    const updatedEmployee = await Employee.findOneAndUpdate(
+    const updatedBook = await Book.findOneAndUpdate(
       query,
-      { 
-        $set: req.body, 
+      {
+        $set: req.body,
       },
       { new: true }
     );
-    res.status(200).json(updatedEmployee);
+    res.status(200).json(updatedBook);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -92,14 +88,13 @@ router.put("/:id", async (req, res) => {
 
 //OR
 
-router.delete("/:id", async (req, res) => {
-  try{
-    await Employee.findByIdAndDelete({_id: req.params.id});
-    res.status(200).json("The employee has been deleted!")
-  }catch (err) {
-    res.status(500).json(err)
-  }
-});
-
+// router.delete("/:id", async (req, res) => {
+//   try {
+//     await Employee.findByIdAndDelete({ _id: req.params.id });
+//     res.status(200).json("The employee has been deleted!");
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// });
 
 module.exports = router;
